@@ -1,12 +1,10 @@
-FROM golang
-RUN mkdir /app
-ADD . /app
+# Production Dockerfile for Golang
+FROM golang:1.17 as build
 WORKDIR /app
-## Add this go mod download command to pull in any dependencies
+COPY . /app
 RUN go mod download
-## Our project will now successfully build with the necessary go libraries included.
 RUN go build -o main .
-## Our start command which kicks off
-## our newly created binary executable
-CMD ["/app/main"]
+
+FROM golang:1.17
 EXPOSE 4000
+CMD /app/main
